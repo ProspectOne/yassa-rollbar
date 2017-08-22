@@ -84,8 +84,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $problem->setDetailIncludesStackTrace(true);
                         $message = $problem->toArray();
                         $message['trace'] = json_encode($message['trace']);
-                        $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
-
+                        if ($message['status'] != '404') {
+                            $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
+                        }
                         $problem->setDetailIncludesStackTrace(false);
                         $message = $problem->toArray();
                         $content = json_encode(['Error' => $message['title']]);
