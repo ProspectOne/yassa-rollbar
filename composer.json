@@ -17,6 +17,12 @@
             "role": "developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:ProspectOne/UserModule.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "rollbar/rollbar": "~1.3",
@@ -24,7 +30,9 @@
         "zendframework/zend-loader": "2.*",
         "zendframework/zend-servicemanager": "^3.0",
         "zendframework/zend-log": "2.*",
-        "zfcampus/zf-api-problem": "^1.2"
+        "zfcampus/zf-api-problem": "^1.2",
+        "prospect-one/user-module": "dev-master"
+
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
