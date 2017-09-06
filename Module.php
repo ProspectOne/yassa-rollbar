@@ -98,14 +98,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         } else {
                             $message['trace'] = "";
                         }
-                        if ($message['status'] != '404') {
+
+                        $notLoggedStatuses = [400, 401, 404];
+                        if (!in_array($message['status'], $notLoggedStatuses)) {
                             $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
+                            $message['status'] = Response::STATUS_CODE_500;
                         }
                         $problem->setDetailIncludesStackTrace(false);
                         $message = $problem->toArray();
                         $content = json_encode(['Error' => $message['title']]);
                         $response = new Response();
-                        $response->setStatusCode(Response::STATUS_CODE_500);
+                        $response->setStatusCode($message['status']);
                         $response->getHeaders()->addHeaders(['Content-type:application/json']);
                         $response->setContent($content);
                         $event->setResponse($response);
