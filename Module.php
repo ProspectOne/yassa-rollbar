@@ -106,7 +106,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         }
                         $problem->setDetailIncludesStackTrace(false);
                         $message = $problem->toArray();
-                        $content = json_encode(['Error' => $message['title']]);
+                        $error = $message['title'] . "\n\n" . $message['detail'] ?? "";
+
+                        $content = json_encode(['Error' => $error]);
                         $response = new Response();
                         $response->setStatusCode($message['status']);
                         $response->getHeaders()->addHeaders(['Content-type:application/json']);
