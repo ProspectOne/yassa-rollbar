@@ -63,7 +63,7 @@ class RollbarNotifier extends Rollbar
      */
     public static function report_php_error($errno, $errstr, $errfile, $errline)
     {
-        self::error($errno . PHP_EOL . $errstr . PHP_EOL . $errfile . PHP_EOL . $errline);
+        self::error('Error #' . $errno . PHP_EOL . 'Message: ' . $errstr . PHP_EOL . 'File: ' . $errfile . ' at Line: ' . $errline);
         return false;
     }
 }
