@@ -26,7 +26,7 @@ class RollbarNotifier extends Rollbar
         if ($payload_data) {
             $extra_data = array_merge($extra_data, $payload_data);
         }
-        return self::log(Level::error(), $exc, $extra_data)->getUuid();
+        return self::log(Level::ERROR, $exc, $extra_data)->getUuid();
     }
 
     /**
@@ -42,7 +42,7 @@ class RollbarNotifier extends Rollbar
     public static function report_message($message, $level = null, $extra_data = null, $payload_data = null)
     {
         if (empty($level)) {
-            $level = Level::error();
+            $level = Level::ERROR;
         }
         if ($payload_data) {
             $extra_data = array_merge($extra_data, $payload_data);
@@ -55,7 +55,7 @@ class RollbarNotifier extends Rollbar
      */
     public static function report_fatal_error()
     {
-        self::fatalHandler();
+        self::critical('Fatal Error.');
     }
 
     /**
@@ -63,7 +63,7 @@ class RollbarNotifier extends Rollbar
      */
     public static function report_php_error($errno, $errstr, $errfile, $errline)
     {
-        self::errorHandler($errno, $errstr, $errfile, $errline);
+        self::error('Error #' . $errno . PHP_EOL . 'Message: ' . $errstr . PHP_EOL . 'File: ' . $errfile . ' at Line: ' . $errline);
         return false;
     }
 }
