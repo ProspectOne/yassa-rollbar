@@ -28,6 +28,10 @@ namespace Yassa\Rollbar\View\Helper;
 use Yassa\Rollbar\Options\ModuleOptions;
 use Zend\View\Helper\AbstractHelper;
 
+/**
+ * Class Rollbar
+ * @package Yassa\Rollbar\View\Helper
+ */
 class Rollbar extends AbstractHelper
 {
     /**
