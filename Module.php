@@ -27,6 +27,7 @@ namespace Yassa\Rollbar;
 
 use ProspectOne\UserModule\Exception\LogicException;
 use Rollbar\Payload\Level;
+use Yassa\Rollbar\Options\ModuleOptions;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
@@ -40,20 +41,35 @@ use ZF\ApiProblem\ApiProblemResponse;
  */
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
+    /**
+     * @var RollbarNotifier
+     */
+    private $rollbar;
+
+    /**
+     * @var ModuleOptions
+     */
+    private $options;
+
+    /**
+     * @param MvcEvent $event
+     */
     public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\Mvc\ApplicationInterface $application */
         $application = $event->getApplication();
 
-        /** @var \Yassa\Rollbar\Options\ModuleOptions $options */
+        /** @var ModuleOptions $options */
         $options = $application->getServiceManager()->get('Yassa\Rollbar\Options\ModuleOptions');
 
         if ($options->enabled) {
             /** @var RollbarNotifier $rollbar */
             $rollbar = $application->getServiceManager()->get('RollbarNotifier');
+            $this->rollbar = $rollbar;
+            $this->options = $options;
 
             if ($options->exceptionhandler) {
-                set_exception_handler(array($rollbar, "report_exception"));
+                set_exception_handler(array($this, "report_exception"));
 
                 $eventManager = $application->getEventManager();
                 $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function(MvcEvent $event) use ($rollbar) {
@@ -171,5 +187,24 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 }
             }
         };
+    }
+
+    /**
+     * @param $exc
+     * @param null $extra_data
+     * @param null $payload_data
+     * @return string
+     */
+    protected function report_exception(\Exception $exc, $extra_data = null, $payload_data = null)
+    {
+        if (in_array(get_class($exc), $this->options->ignored_exceptions)) {
+            return "";
+        }
+
+        if (!empty($exc->getPrevious()) && in_array(get_class($exc->getPrevious()), $this->options->ignored_exceptions)) {
+            return "";
+        }
+
+        return $this->rollbar->report_exception($exc, $extra_data = null, $payload_data = null);
     }
 }

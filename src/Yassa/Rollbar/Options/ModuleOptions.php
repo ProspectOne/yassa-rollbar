@@ -66,6 +66,7 @@ use Zend\Stdlib\AbstractOptions;
  * @property bool $report_suppressed Sets whether errors suppressed with '@' should be reported or not. Default: false
  * @property bool $use_error_reporting Sets whether to respect current `error_reporting()` level or not. Default: false
  * @property string|mixed $proxy Send data via a proxy server. E.g. Using a local proxy with no authentication.
+ * @property string|mixed $ignored_exceptions Ignored exceptions.
  *
  * Deprecated and unused in Rollbar 1.0 (compatibility):
  * @property string $client_access_token Project client-side access token
@@ -280,6 +281,11 @@ class ModuleOptions extends AbstractOptions
      * @var bool should we log ApiProblemResponse messages
      */
     protected $catch_apigility_errors = false;
+
+    /**
+     * @var array Ignored exceptions;
+     */
+    protected $ignored_exceptions = [];
 
     /**
      * {@inheridoc}
