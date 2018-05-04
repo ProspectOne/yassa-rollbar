@@ -195,7 +195,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
      * @param null $payload_data
      * @return string
      */
-    protected function report_exception(\Exception $exc, $extra_data = null, $payload_data = null)
+    public function report_exception(\Exception $exc, $extra_data = null, $payload_data = null)
     {
         if (in_array(get_class($exc), $this->options->ignored_exceptions)) {
             return "";
