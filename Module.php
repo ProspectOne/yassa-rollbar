@@ -195,14 +195,16 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
      * @param null $payload_data
      * @return string
      */
-    public function report_exception(\Exception $exc, $extra_data = null, $payload_data = null)
+    public function report_exception($exc, $extra_data = null, $payload_data = null)
     {
         if (in_array(get_class($exc), $this->options->ignored_exceptions)) {
             return "";
         }
 
-        if (!empty($exc->getPrevious()) && in_array(get_class($exc->getPrevious()), $this->options->ignored_exceptions)) {
-            return "";
+        if($exc instanceof \Exception) {
+            if (!empty($exc->getPrevious()) && in_array(get_class($exc->getPrevious()), $this->options->ignored_exceptions)) {
+                return "";
+            }
         }
 
         return $this->rollbar->report_exception($exc, $extra_data = null, $payload_data = null);
