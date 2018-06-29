@@ -13,7 +13,7 @@ use Rollbar\Rollbar;
 class RollbarNotifier extends Rollbar
 {
     /**
-     * @param \Exception $exc Exception to be logged
+     * @param \Throwable $exc Exception to be logged
      * @param array $extra_data Additional data to be logged with the exception
      * @param array $payload_data This is deprecated as of v1.0.0 and remains for
      * backwards compatibility. The content fo this array will be merged with

@@ -33,6 +33,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Response;
 use ZF\ApiProblem\ApiProblemResponse;
+use Throwable;
 
 /**
  * Class Module
@@ -195,7 +196,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
      * @param null $payload_data
      * @return string
      */
-    public function report_exception(\Exception $exc, $extra_data = null, $payload_data = null)
+    public function report_exception(Throwable $exc, $extra_data = null, $payload_data = null)
     {
         if (in_array(get_class($exc), $this->options->ignored_exceptions)) {
             return "";
