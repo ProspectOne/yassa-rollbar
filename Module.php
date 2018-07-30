@@ -123,7 +123,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         }
                         $problem->setDetailIncludesStackTrace(false);
                         $message = $problem->toArray();
-                        $error = $message['title'] . "\n\n" . $message['detail'] ?? "";
+                        $detail = (!is_array($message['detail'])) ? $message['detail'] : $message['detail']['Error'];
+                        $error = $message['title'] . "\n\n" . $detail ?? "";
 
                         $content = json_encode(['Error' => $error]);
                         $response = new Response();
